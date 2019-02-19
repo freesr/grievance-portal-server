@@ -33,7 +33,11 @@ const GrievanceSchema=new mongoose.Schema({
    token:{
        type:String
    },
-   email:mongoose.SchemaTypes.email,
+  // email:mongoose.SchemaTypes.email,
+  email:{
+    // type:mongoose.SchemaTypes.Email,
+    type:String
+     },
     
     phoneNumber:{
         type:Number,

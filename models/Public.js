@@ -11,9 +11,13 @@ const PublicSchema=new mongoose.Schema({
   address:{
     type:String
   },
+  state:{
+      type:String,
+      //enum:['telangana','uttarpradesh']
+  },
   district:{
     type:String,
-    enum:['nalgonda','rangareddy','hyderabad']
+    enum:['kanpur','lucknow','hyderabad','rangareddy']
   },
   pincode:
   {
@@ -23,11 +27,13 @@ const PublicSchema=new mongoose.Schema({
   },
   phoneNumber:
   {
-    type:String,
-    default:username
+    type:Number
+ 
+
   },
   email:{
-  type:mongoose.SchemaTypes.email,
+ // type:mongoose.SchemaTypes.Email,
+ type:String
   },
   password:{
     type:String
