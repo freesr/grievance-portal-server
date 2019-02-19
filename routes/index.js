@@ -3,6 +3,8 @@ const router = express.Router();
 const bcrypt=require('bcrypt');
 const Public=require('./../models/Public');
 const Grievance =require('./../models/Grievance');
+const Districtofficer=require('./../model/Districtofficer');
+const Escalation =require('./../models/Escalation');
 const GrievanceStatus=require('./../models/GrievanceStatus');
 
 
@@ -74,5 +76,67 @@ router.route('/public/login')
         });
        // res.status(200).json({message:'ok'});
     });
+    router.route('/public/newGrievance')
+    .post((req,res)=>{
+        console.log('Trigered post request on public/newGrievance');
+        const {username,name,country,address,gender,state,district,pincode,token,email,phoneNumber,description,department,attachments}=req.body;
+        const newgrievance =new Grievance({
+            username,
+            name,
+            country,
+            address,
+            gender,
+            state,
+            district,
+            pincode,
+            token,
+            email,
+            phoneNumber,
+            description,
+            department,
+            attachments
+
+        });
+        newgrievance.id=Date.now();
+        newgrievance.token=newgrievance.id;
+        newgrievance.tokenPassword=username.substring(0,4);
+        raiseGrievance(newgrievance,(err,newgrievance)=>{
+            if(err)
+            {
+                throw err;
+            }
+            else{
+                Districtofficer.findOne({district:district})
+                .then((officer)=>{
+                    if(officer.length>0)
+                    {
+                        Escalation.findOne({grievanceId:newgrievance.id})
+                        .then((esclationobj)=>{
+                            if(esclationobj!=0)
+                            {
+                                const Escalationvar  =new Escalation({
+                                    grievanceId:newgrievance.id,
+                                    officerHierarchyStack:officer.username,
+                                    escalationStack:Date.now()
+        
+                                }).save()
+                                .then()
+                                .catch();
+                            }
+                        })
+                        .catch(err=>{
+                            console.log('err');
+                        })
+                        
+                    }
+                })
+                .catch(err=>{
+                    console.log('err');
+                })
+
+            }
+        });
+
+    })
 
 module.exports = router;

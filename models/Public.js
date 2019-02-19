@@ -44,3 +44,6 @@ const PublicSchema=new mongoose.Schema({
 });
 const Public =mongoose.model('Public',PublicSchema);
 module.exports=Public;
+moldule.exports.raiseGrievance=(newGrievance,cb)=>{
+    newGrievance.save(cb);
+};

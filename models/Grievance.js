@@ -3,7 +3,7 @@ const email = require('mongoose-type-email');
 const GrievanceSchema=new mongoose.Schema({
     id:{
         type:String,
-        default:Date.now
+        //default:Date.now
     },
     username:{
         type:String
@@ -20,6 +20,10 @@ const GrievanceSchema=new mongoose.Schema({
     gender:{
        type:String,
        enum: ['male','femal']
+    },
+    state:{
+        type:String,
+        //enum:['telangana','uttarpradesh']
     },
     disrict:{
         type:String,

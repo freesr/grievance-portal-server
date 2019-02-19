@@ -1,6 +1,6 @@
 const mongoose =require('mongoose');
 //const email = require('mongoose-type-email');
-const PublicSchema=new mongoose.Schema({
+const DistrictofficerSchema=new mongoose.Schema({
     username:{
         type:String
     },
@@ -19,3 +19,5 @@ const PublicSchema=new mongoose.Schema({
     }
 
 },{timestamps:true});
+const Districtofficer=mongoose.model('Districtofficer',DistrictofficerSchema);
+module.exports=Districtofficer;
