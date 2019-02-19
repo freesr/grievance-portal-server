@@ -6,7 +6,7 @@ const app = express();
 
 async function connectToDatabase() {
     try {
-        await mongoose.connect('mongodb://localhost:27017/dippGrievanceDB');
+        await mongoose.connect('mongodb://localhost:27017/dippGrievanceDB',{useNewUrlParser:true});
         console.log('connection established successfully');
     } catch (err) {
         console.log('connection was uncessfull');
