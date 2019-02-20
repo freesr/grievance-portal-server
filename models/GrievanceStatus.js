@@ -3,7 +3,7 @@ const GrievanceStatusSchema =new mongoose.Schema({
     grievanceId:{
         type:String
     },
-    Staus:{
+    status:{
         type:String
     },
     scrutinizedTime:{
@@ -32,7 +32,7 @@ module.exports.setStatus=async (gs)=>{
     try{
         const statusobj =await gs.save();
         console.log('grievance succesfully saved');
-        return statusbj;
+        return statusobj;
     }
     catch(err){
         console.log(`Following error occurred while updating status : ${err}`);

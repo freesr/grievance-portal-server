@@ -1,8 +1,9 @@
 const express = require('express');
-const Public = require('../models/public');
-const Grievance = require('../models/grievance');
-const Escalation = require('../models/escalation');
+const Public = require('./../models/public');
+const Grievance = require('./../models/grievance');
+const Escalaltion = require('./../models/escalation');
 const GrievanceStatus = require('./../models/grievanceStatus');
+const Districtofficer =require('./../models/districtofficer');
 const router = express.Router();
 
 
@@ -55,9 +56,9 @@ router.route('/login')
             message: `successful`
         });
     });
-router.route('/public/newGrievance')
+router.route('/newGrievance')
     .post((req, res) => {
-        let grievance_var;
+        const grievance_var;
         console.log('Trigered post request on public/newGrievance');
         const {
             username,
@@ -98,35 +99,37 @@ router.route('/public/newGrievance')
         Grievance.raiseGrievance(newgrievance)
             .then((newGrievanceobj) => {
                 console.log(newGrievanceobj);
-                grievance_var=newGrievanceobj.id;
+                grievance_var = newGrievanceobj.id;
                 Districtofficer.findOne({
                         districtName: newGrievanceobj.district
                     })
                     .then((officer) => {
                         console.log(officer);
-                        if (officer.length > 0) {
+                        if (officer!==null) {
                             //Escalation.findOne({grievanceId:newgrievance.id})
                             // .then((esclationobj)=>{
                             //  if(!esclationobj)
                             // {
-                            const Escalationvar = new Escalation({
+                            const Escalationvar = new Escalaltion({
                                 grievanceId: newgrievance.id,
                                 officerHierarchyStack: officer.username,
                                 escalationStack: Date.now()
 
                             });
-                            Escalation.escalate(Escalationvar)
+                            Escalaltion.esclate(Escalationvar)
                                 .then((esclationobj) => {
                                     console.log(esclationobj);
                                     /*send notification*/
                                     const gs = new GrievanceStatus({
-                                        submittedtime: newGrievanceobj.id
+                                        submittedtime: newGrievanceobj.id,
+                                        status:'submitted'
 
                                     });
-                                    Grievance.setStatus(gs)
+                                    GrievanceStatus.setStatus(gs)
                                         .then((statusobj) => {
                                             console.log(statusobj);
-                                            
+                                            res.status(200).json({message:'succesful'});
+
 
                                         })
                                         .catch(err => {
@@ -139,6 +142,7 @@ router.route('/public/newGrievance')
 
                                 })
                                 .catch(err => {
+                                    console.log(err);
                                     res.status(500).json({
                                         message: `not escalated`
                                     });
@@ -157,28 +161,30 @@ router.route('/public/newGrievance')
                         }
                     })
                     .catch(err => {
-                        console.log('err' + 'offercer cat');
+                        console.log(err + 'offercer cat');
                     });
 
 
 
             })
             .catch(err => {
-                console.log('err' + 'grivence catch');
+                console.log(err + 'grivence catch');
             });
-            ((grievance_var)=>{
-                setTimeout((grievance_var)=>{
-                if(checkStatus(grievance_var))
-                {
-            //
-                }
-                else{
-            //next level
-                }    
-            
-                },5000);
-            
-            })();
+        // ((grievance_var)=>{
+        //     setTimeout((grievance_var)=>{
+        //     if(checkStatus(grievance_var))
+        //     {
+
+
+        // //
+        //     }
+        //     else{
+        // //next level
+        //     }    
+
+        //     },5000);
+
+        // })();
 
 
     });
@@ -195,11 +201,77 @@ router.route('/public/newGrievance')
 
 // })
 
+router.route('/cancelGrievance')
+    .get((req, res) => {
+        console.log('cancel request');
+        const id = req.query.token;
+        console.log(id);
+        Grievance.findOne({
+                id: id
+            })
+            .then((obj) => {
+                console.log(obj);
+                if(obj!==null)
+                {
+                    GrievanceStatus.findOne({
+                        grievanceId: obj.id
+                    })
+                    .then((statusob) => {
+                        console.log(statusob);
+                        if (statusob.status === 'submitted') {
+                            GrievanceStatus.updateOne({
+                                    grievanceId: obj.id
+                                }, {$:{cancelledTime: Date.now(),status:'cancelled'}
+                                    
+                                   
+                                })
+                                .then((cancelledstatus) => {
+                                    console.log(cancelledstatus);
+
+                                    res.status(200).json({
+                                        message: 'success'
+                                    });
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                    res.status(500).json({
+                                        message: 'failure'
+                                    });
+                                });
+                        } else {
+                            res.status(500).json({
+                                message: 'cant cancelled'
+                            });
+
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        res.status(500).json({
+                            message: 'failure'
+                        });
+                    });
+                }
+                else{
+                    console.log('no id found');
+                        res.status(500).json({
+                            message: 'no grievance found'
+
+                });
+            }
+                
+
+
+
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    message: 'failure'
+                });
+            });
+    });
+    
+    
 
 module.exports = router;
-
-
-
-
-
-

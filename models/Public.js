@@ -8,47 +8,47 @@ mongoose.Promise = global.Promise;
 const publicSchema = new mongoose.Schema({
     username: {
         type: String,
-        required: true
+      //  required: true
     },
     gender: {
         type: String,
         enum: Enumeration.Gender,
-        required: true
+      //  required: true
     },
     address: {
         type: String,
-        required: true
+      //  required: true
     },
     country: {
         type: String,
-        required: true
+       // required: true
     },
     state: {
         type: String,
         enum: Enumeration.State,
-        required: true
+      //  required: true
     },
     district: {
         type: String,
         enum: Enumeration.District,
-        required: true
+      //  required: true
     },
     pincode: {
         type: String,
         enum: Enumeration.Pincode,
-        required: true
+      //  required: true
     },
     phoneNumber: {
         type: String,
-        required: true
+      //  required: true
     },
     email: {
         type: mongoose.SchemaTypes.Email,
-        required: true
+       // required: true
     },
     password: {
         type: String,
-        required: true
+       // required: true
     }
 }, {
     timestamps: true
