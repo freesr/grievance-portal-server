@@ -1,5 +1,6 @@
 const mongoose =require('mongoose');
 const email = require('mongoose-type-email');
+const Enumeration = require('./enumeration');
 const GrievanceSchema=new mongoose.Schema({
     id:{
         type:String,
@@ -12,40 +13,44 @@ const GrievanceSchema=new mongoose.Schema({
         type:String
     },
     country:{
-        type:String
+       // type:String
     },
     address:{
         type:String
     },
-    gender:{
-       type:String,
-       enum: ['male','femal']
+    gender: {
+        type: String,
+        enum: Enumeration.Gender,
+       // required: true
     },
-    state:{
-        type:String,
-        //enum:['telangana','uttarpradesh']
+    state: {
+        type: String,
+        enum: Enumeration.State,
+        required: true
     },
-    disrict:{
-        type:String,
-         enum:['nalgonda','rangareddy','hyderabad']
+    district: {
+        type: String,
+        enum: Enumeration.District,
+       // required: true
     },
     pincode: {
-    type:Number,
-    enum:[500081,500067,500011]
- 
-   },
+        type: String,
+        enum: Enumeration.Pincode,
+     //   required: true
+    },
    token:{
        type:String
    },
-  // email:mongoose.SchemaTypes.email,
-  email:{
-    // type:mongoose.SchemaTypes.Email,
-    type:String
-     },
+  
+   email: {
+    type: mongoose.SchemaTypes.Email,
+   // required: true
+},
     
-    phoneNumber:{
-        type:Number,
-    },
+phoneNumber: {
+    type: String,
+   // required: true
+},
     description:{
         type:String
     },
@@ -62,3 +67,17 @@ const GrievanceSchema=new mongoose.Schema({
 },{timestamps:true});
 const Grievance =mongoose.model('Grievance',GrievanceSchema);
 module.exports=Grievance;
+
+module.exports.raiseGrievance=async (newGrievance)=>{
+    try{
+        const newGrievanceobj =await newGrievance.save();
+        console.log('grievance succesfully saved');
+        return newGrievanceobj;
+    }
+    catch(err){
+        console.log(`Following error occurred while creating new user : ${err}`);
+        throw err;
+    }
+
+    
+};

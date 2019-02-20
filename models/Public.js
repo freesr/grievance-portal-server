@@ -1,49 +1,72 @@
-const mongoose =require('mongoose');
-const email = require('mongoose-type-email');
-const PublicSchema=new mongoose.Schema({
-  username:{
-  type:String
-  },
-  gender:{
-    type:String,
-    enum:['male','female']
-  },
-  address:{
-    type:String
-  },
-  state:{
-      type:String,
-      //enum:['telangana','uttarpradesh']
-  },
-  district:{
-    type:String,
-    enum:['kanpur','lucknow','hyderabad','rangareddy']
-  },
-  pincode:
-  {
-    type:Number,
-    enum:[500081,500067,500011]
- 
-  },
-  phoneNumber:
-  {
-    type:Number
- 
+const mongoose = require('mongoose');
+const Email = require('mongoose-type-email');
+const Enumeration = require('./enumeration');
 
-  },
-  email:{
- // type:mongoose.SchemaTypes.Email,
- type:String
-  },
-  password:{
-    type:String
-  }
- 
- 
- 
+//for promises
+mongoose.Promise = global.Promise;
+
+const publicSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true
+    },
+    gender: {
+        type: String,
+        enum: Enumeration.Gender,
+        required: true
+    },
+    address: {
+        type: String,
+        required: true
+    },
+    country: {
+        type: String,
+        required: true
+    },
+    state: {
+        type: String,
+        enum: Enumeration.State,
+        required: true
+    },
+    district: {
+        type: String,
+        enum: Enumeration.District,
+        required: true
+    },
+    pincode: {
+        type: String,
+        enum: Enumeration.Pincode,
+        required: true
+    },
+    phoneNumber: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: mongoose.SchemaTypes.Email,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    }
+}, {
+    timestamps: true
 });
-const Public =mongoose.model('Public',PublicSchema);
-module.exports=Public;
-moldule.exports.raiseGrievance=(newGrievance,cb)=>{
-    newGrievance.save(cb);
+
+const Public = mongoose.model('User', publicSchema);
+module.exports = Public;
+
+//for registering new user in system
+module.exports.createPublicUser = async (newUser) => {
+    try {
+        const user = await newUser.save();
+        console.log(`This user has been successfully created`);
+        return user;
+    } catch (err) {
+        console.log(`Following error occurred while creating new user : ${err}`);
+        throw err;
+    }
 };
+
+

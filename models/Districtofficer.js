@@ -11,8 +11,9 @@ const DistrictofficerSchema=new mongoose.Schema({
         type:String
     },
     districtName:{
-        type:String,
-        enum:['kanpur','lucknow','hyderabad','rangareddy']
+        type: String,
+        enum: Enumeration.District,
+        required: true
     },
     fullName:{
         type:String

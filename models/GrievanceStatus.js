@@ -27,3 +27,35 @@ const GrievanceStatusSchema =new mongoose.Schema({
 });
 const GrievanceStatus = mongoose.model('Grievancestatus',GrievanceStatusSchema);
 module.exports=GrievanceStatus;
+
+module.exports.setStatus=async (gs)=>{
+    try{
+        const statusobj =await gs.save();
+        console.log('grievance succesfully saved');
+        return statusbj;
+    }
+    catch(err){
+        console.log(`Following error occurred while updating status : ${err}`);
+        throw err;
+    }
+
+};
+module.exports.checkstatus=((grievance)=>{
+    GrievanceStatus.find({grievanceId:grievance})
+    .then((obj)=>{
+        if(obj.scrutinizedTime!==null)
+        {
+            return true;
+        }
+        else{
+            return false;
+        }
+    })
+    .catch(err=>{
+        console.log(err);
+        return err;
+        //see here
+    })
+
+});
+
