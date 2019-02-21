@@ -7,29 +7,44 @@ const GrievanceStatus = require('./../models/grievanceStatus');
 const router = express.Router();
 router.route('/status')
 .post((req,res)=>{
-    const{token,tokenPassWord}=req.body;
-    Grievance.findOne({token:token})
+    const{token,tokenPassword}=req.body;
+    console.log('hii');
+    Grievance.findOne({id:token})
     .then((greve)=>{
-        if(!greve)
+        if(greve!==null)
         {
-            if(greve.tokenPassWord===tokenPassWord)
+            if(greve.tokenPassword===tokenPassword)
             {
                 GrievanceStatus.findOne({grievanceId:greve.id}).then(
                     (st)=>{
                         //see
                         Escalaltion.findOne({grievanceId:token})
                         .then((es)=>{
-                            console.log(st,greve,es);
-                            res.status(200).json(st,greve,es);
+                           /// const l={...greve,...st,...es};
+                           //const l=Object.assign(greve,st,es);
+                           const l={
+                               a:greve,
+                               b:st,
+                               c:es.officerHierarchyStack[0]
+                           }
+                            console.log(l);
+                            res.status(200).json(l);
                         })
+                        .catch(err=>{
+                            console.log(err);
+                            res.status(500).json({message:'fail'});
+                        });
                        
                     }
                 )
                 .catch(err=>{
                     console.log(err);
                     res.status(500).json({message:'fail'});
-                })
+                });
               
+            }
+            else{
+                res.status(500).json({message:'token or password wrong'});
             }
         }
     })
