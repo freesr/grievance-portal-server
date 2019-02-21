@@ -68,9 +68,9 @@ phoneNumber: {
 const Grievance =mongoose.model('Grievance',GrievanceSchema);
 module.exports=Grievance;
 
-module.exports.raiseGrievance=async (newGrievance)=>{
+module.exports.raiseGrievance = async (newGrievance) => {
     try{
-        const newGrievanceobj =await newGrievance.save();
+        const newGrievanceobj = await newGrievance.save();
         console.log('grievance succesfully saved');
         return newGrievanceobj;
     }
