@@ -31,10 +31,11 @@ router.route('/allocatedGrievances')
           {
             Grievance.findOne({id:escal.grievanceId})
             .then((g)=>{
-              ar.push(g);
+              const object2 = {grevob:g,statob:p};
+              ar.push(object2);
               if(i==escalationob.length-1)
               {
-                res.status(200).json(ar);
+                res.status(200).json(ar,);
               }
             }).catch((err)=>{
               console.log(err);
