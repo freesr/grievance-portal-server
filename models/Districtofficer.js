@@ -10,7 +10,7 @@ const DistrictofficerSchema = new mongoose.Schema({
     },
     phoneNumber: {
         type: String
-    },
+    },   
     districtName: {
         type: String,
         enum: Enumeration.District,

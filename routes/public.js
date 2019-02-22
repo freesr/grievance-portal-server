@@ -191,18 +191,6 @@ router.route('/newGrievance')
 
 
     });
-//         if(err)
-//         {
-//             console.log(`error is ${err}`)
-//             throw err;
-//         }
-//         else{
-
-
-//         }
-//     });
-
-// })
 
 router.route('/cancelGrievance')
     .get((req, res) => {
