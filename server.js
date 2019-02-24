@@ -30,9 +30,11 @@ connectToDatabase().then(() => {
     const public = require('./routes/public');
     const grievance1=require('./routes/grievance_route');
     const official=require('./routes/offical');
+    const zonalofficier=require('./routes/zonalofficier');
     app.use('/public', public);
     app.use('/grievance',grievance1);
     app.use('/official',official);
+    app.use('/zonal',zonalofficier);
 });
 
 module.exports = app;

@@ -14,6 +14,23 @@ router.route('/login')
 
 
 });
+
+// router
+//   .route('/allocatedGrievances')
+//     .get( (req, res) => {
+//       const username = 'varun';
+
+//       const escalationDoc = await (async function(){
+//         try {
+//           Escalaltion.find( { officerHierarchyStack: { $in: [username] } } ).exec()
+//         } catch(err) {
+
+//         }
+        
+//       })();
+
+//     })
+
 router.route('/allocatedGrievances')
 .get((req,res)=>{
     //const username=req.body.username;
